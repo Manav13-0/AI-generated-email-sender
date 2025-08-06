@@ -208,6 +208,7 @@ app.post('/api/send-email', async (req, res) => {
 });
 
 // Global error handler
+// Global error handler
 app.use((error, req, res, next) => {
   res.status(500).json({
     error: 'Internal server error',
@@ -215,8 +216,8 @@ app.use((error, req, res, next) => {
   });
 });
 
-// 404
-app.use('*', (req, res) => {
+// 404 handler - CORRECTED
+app.all('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
