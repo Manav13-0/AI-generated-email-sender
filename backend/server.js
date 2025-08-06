@@ -17,7 +17,7 @@ const groq = new Groq({
 
 // Middleware
 app.use(helmet());
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
+app.use(cors({ origin: process.env.FRONTEND_URL || 'https://ai-generated-email-sender-client.onrender.com' }));
 app.use(express.json({ limit: '10mb' }));
 
 const limiter = rateLimit({
