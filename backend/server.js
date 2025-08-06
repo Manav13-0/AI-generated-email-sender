@@ -17,7 +17,7 @@ const groq = new Groq({
 
 // Middleware
 app.use(helmet());
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
+app.use(cors({ origin: process.env.FRONTEND_URL || 'https://ai-generated-email-sender-client.onrender.com' }));
 app.use(express.json({ limit: '10mb' }));
 
 const limiter = rateLimit({
@@ -26,7 +26,7 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// ✅ UPDATED: Create Ethereal-compatible transporter
+// ✅ UPDATED: Create Ethereal-compatible transporte
 const createTransporter = () => {
   console.log('📧 Creating email transporter...');
   console.log('Email User:', process.env.EMAIL_USER ? 'Set' : 'NOT SET');
