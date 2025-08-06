@@ -10,7 +10,7 @@ function Footer() {
             </span>
           </p>
           <p className="text-xs mt-2 text-gray-500">
-            © 2025 AI Email Sender. Made with Manav for efficient communication.
+            © 2025 AI Email Sender. Made by Manav for efficient communication.
           </p>
         </div>
       </div>
