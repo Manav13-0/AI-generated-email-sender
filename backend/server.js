@@ -17,7 +17,7 @@ const groq = new Groq({
 
 // Middleware
 app.use(helmet());
-app.use(cors({ origin: process.env.FRONTEND_URL || 'https://ai-generated-email-sender-client.onrender.com' }));
+app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
 app.use(express.json({ limit: '10mb' }));
 
 const limiter = rateLimit({
@@ -208,7 +208,6 @@ app.post('/api/send-email', async (req, res) => {
 });
 
 // Global error handler
-
 app.use((error, req, res, next) => {
   res.status(500).json({
     error: 'Internal server error',
