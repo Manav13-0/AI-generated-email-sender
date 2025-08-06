@@ -9,7 +9,6 @@ const nodemailer = require('nodemailer');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
@@ -26,12 +25,8 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// ✅ UPDATED: Create Ethereal-compatible transporter
+// Create Ethereal-compatible transporter
 const createTransporter = () => {
-  console.log('📧 Creating email transporter...');
-  console.log('Email User:', process.env.EMAIL_USER ? 'Set' : 'NOT SET');
-  console.log('Email Pass:', process.env.EMAIL_PASS ? 'Set' : 'NOT SET');
-
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
     throw new Error('EMAIL_USER and EMAIL_PASS environment variables are required');
   }
@@ -64,12 +59,6 @@ app.get('/api/health', (req, res) => {
 // Email test config
 app.get('/api/test-email-config', async (req, res) => {
   try {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      return res.status(400).json({
-        error: 'Email credentials missing in .env'
-      });
-    }
-
     const transporter = createTransporter();
     await transporter.verify();
 
@@ -145,7 +134,7 @@ app.post('/api/generate-email', async (req, res) => {
   }
 });
 
-// ✅ UPDATED: Send email with Ethereal + multiple recipients + preview URL
+// Send email
 app.post('/api/send-email', async (req, res) => {
   try {
     const { recipients, subject, body, senderName } = req.body;
@@ -156,12 +145,6 @@ app.post('/api/send-email', async (req, res) => {
 
     if (!subject || !body) {
       return res.status(400).json({ error: 'Subject and body are required' });
-    }
-
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      return res.status(500).json({
-        error: 'Email credentials not configured'
-      });
     }
 
     const transporter = createTransporter();
@@ -215,13 +198,10 @@ app.use((error, req, res, next) => {
   });
 });
 
-// 404
-app.use('*path', (req, res) => {
+// 404 handler
+app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📧 Email: ${process.env.EMAIL_USER ? '✅ Configured' : '❌ Not configured'}`);
-  console.log(`🤖 Groq: ${process.env.GROQ_API_KEY ? '✅ Configured' : '❌ Not configured'}`);
-});
+// ✅ EXPORT APP FOR VERCEL
+module.exports = app;
